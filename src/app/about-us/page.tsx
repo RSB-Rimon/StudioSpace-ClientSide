@@ -272,7 +272,7 @@ export default function AboutPage() {
           </div>
 
           <p className="mb-3 text-sm font-bold tracking-[3px] text-[#8B5E3C]">
-            LET&apos,'S CREATE TOGETHER
+            LET&apos;S CREATE TOGETHER
           </p>
 
           <h2 className="text-3xl font-bold text-[#172B4D] md:text-4xl">
