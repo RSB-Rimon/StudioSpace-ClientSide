@@ -50,7 +50,9 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <main className="bg-white">
+  <section id="about">
+
+      <main className="bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-[#172B4D]">
         <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#8B5E3C]/20 blur-3xl" />
@@ -294,5 +296,6 @@ export default function AboutPage() {
         </div>
       </section>
     </main>
+  </section>
   );
 }
