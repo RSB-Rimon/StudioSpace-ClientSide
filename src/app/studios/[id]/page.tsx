@@ -9,11 +9,12 @@ import {
   CheckCircle2,
   CalendarDays,
   UserRound,
-  Pencil,
-  Trash2,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import EditStudioPage from "@/components/EditStudio";
+import DeleteStudioPage from "@/components/DeleteStudioPage";
+import BookStudioButton from "@/components/BookStudioButton";
 
 interface Studio {
   _id: string;
@@ -24,6 +25,7 @@ interface Studio {
   securityDeposit: number;
   maxCapacity: number;
   image: string;
+  availableDate: string; // Added
   amenities: string[];
   overview: string;
   ownerName?: string;
@@ -37,11 +39,21 @@ interface StudioDetailsPageProps {
 const StudioDetailsPage = async ({ params }: StudioDetailsPageProps) => {
   const { id } = await params;
 
-  const res = await fetch(`http://localhost:5000/studios/${id}`, {
-    cache: "no-store",
-  });
+  let data: Studio | null = null;
 
-  if (!res.ok) {
+  try {
+    const res = await fetch(`http://localhost:5000/studios/${id}`, {
+      cache: "no-store",
+    });
+
+    if (res.ok) {
+      data = await res.json();
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+
+  if (!data) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <div className="rounded-2xl border bg-white p-10 text-center shadow-sm">
@@ -59,8 +71,6 @@ const StudioDetailsPage = async ({ params }: StudioDetailsPageProps) => {
     );
   }
 
-  const data: Studio = await res.json();
-
   return (
     <main className="min-h-screen bg-[#F8F9FB] px-4 py-10">
       <div className="mx-auto max-w-7xl">
@@ -76,27 +86,8 @@ const StudioDetailsPage = async ({ params }: StudioDetailsPageProps) => {
 
           {/* Edit & Delete Buttons */}
           <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              className="h-10 border-[#8B5E3C] px-5 text-[#8B5E3C] hover:bg-[#F5EDE7]"
-            >
-              <Link href={`/studios/edit/${id}`}>
-                <span className="flex items-center">
-                  <Pencil size={16} className="mr-2" />
-                  Edit Studio
-                </span>
-              </Link>
-            </Button>
-
-            <Button
-              variant="destructive"
-              className="h-10  px-5 hover:cursor-pointer"
-            >
-              <span className="flex items-center">
-                <Trash2 size={16} className="mr-2" />
-                Delete
-              </span>
-            </Button>
+            <EditStudioPage data={data} />
+            <DeleteStudioPage id={id} />
           </div>
         </div>
 
@@ -290,12 +281,27 @@ const StudioDetailsPage = async ({ params }: StudioDetailsPageProps) => {
 
                 <div className="my-6 border-t border-gray-100" />
 
-                <Button className="h-12 w-full rounded-xl bg-[#8B5E3C] text-base font-semibold text-white shadow-md transition hover:bg-[#70482D]">
-                  <Link href={`/studios/${id}/book`}>
-                    <CalendarDays size={19} className="mr-2" />
-                    Book Now
-                  </Link>
-                </Button>
+                {/* Available Date */}
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex items-center gap-2 text-gray-500">
+                    <CalendarDays size={16} className="text-[#8B5E3C]" />
+                    Available Date
+                  </span>
+
+                  <span className="font-semibold text-[#172B4D]">
+                    {data.availableDate
+                      ? new Date(data.availableDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          },
+                        )
+                      : "Not specified"}
+                  </span>
+                </div>
+                <BookStudioButton studio={data} />
 
                 <p className="mt-4 text-center text-xs text-gray-400">
                   Reserve your creative space today.

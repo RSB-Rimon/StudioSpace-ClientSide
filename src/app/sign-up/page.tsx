@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -23,9 +22,7 @@ import { redirect } from "next/navigation";
 import { Aperture, ArrowRight, Camera } from "lucide-react";
 
 export default function SignInFrom() {
-  const handleEmailSignUp = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const fromData = new FormData(e.currentTarget);
@@ -53,12 +50,8 @@ export default function SignInFrom() {
   return (
     <main className="min-h-screen bg-[#F8F9FB] px-4 py-12 md:py-16">
       <div className="mx-auto max-w-md">
-
         {/* Brand */}
-        <Link
-          href="/"
-          className="mb-8 flex items-center justify-center gap-2"
-        >
+        <Link href="/" className="mb-8 flex items-center justify-center gap-2">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#172B4D] text-white">
             <Aperture size={25} />
           </div>
@@ -69,7 +62,6 @@ export default function SignInFrom() {
         </Link>
 
         <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
-
           {/* Top Accent */}
           <div className="h-1.5 bg-[#8B5E3C]" />
 
@@ -88,10 +80,8 @@ export default function SignInFrom() {
           </CardHeader>
 
           <CardContent className="px-6 pb-8 sm:px-8">
-
             <form onSubmit={handleEmailSignUp}>
               <FieldGroup className="gap-5">
-
                 {/* Google Button */}
                 <Field>
                   <Button
@@ -102,14 +92,12 @@ export default function SignInFrom() {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
-                      className="mr-2 h-5 w-5"
+                      className="h-5 w-5"
+                      fill="currentColor"
                     >
-                      <path
-                        d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                        fill="currentColor"
-                      />
+                      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.4 7.9 10.95.6.1.8-.25.8-.55v-2.1c-3.2.7-3.9-1.35-3.9-1.35-.5-1.3-1.3-1.65-1.3-1.65-1.05-.7.1-.7.1-.7 1.15.1 1.75 1.2 1.75 1.2 1 1.7 2.55 1.2 3.2.9.1-.7.4-1.2.7-1.45-2.55-.3-5.2-1.3-5.2-5.7 0-1.25.45-2.3 1.2-3.1-.1-.3-.55-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.65 1.6.2 2.8.1 3.1.75.8 1.2 1.85 1.2 3.1 0 4.4-2.65 5.4-5.2 5.7.4.35.75 1.05.75 2.15v3.2c0 .3.2.65.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
                     </svg>
-                    Continue with Google
+                    Continue with GitHub
                   </Button>
                 </Field>
 
@@ -176,7 +164,8 @@ export default function SignInFrom() {
                     className="h-11 focus-visible:ring-[#8B5E3C]"
                   />
                   <FieldDescription>
-                    Use at least 6 characters with uppercase and lowercase letters.
+                    Use at least 6 characters with uppercase and lowercase
+                    letters.
                   </FieldDescription>
                 </Field>
 
@@ -200,7 +189,6 @@ export default function SignInFrom() {
                     </Link>
                   </FieldDescription>
                 </Field>
-
               </FieldGroup>
             </form>
           </CardContent>
@@ -214,7 +202,8 @@ export default function SignInFrom() {
           and{" "}
           <Link href="/privacy" className="text-[#8B5E3C] hover:underline">
             Privacy Policy
-          </Link>.
+          </Link>
+          .
         </p>
 
         <p className="mt-4 text-center text-xs text-slate-400">

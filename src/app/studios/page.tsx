@@ -1,14 +1,14 @@
+
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Users, ArrowRight } from "lucide-react";
-// import { Button } from "@base-ui/react";
-// import { Button } from "@/components/ui/button";
+import { MapPin, Users, ArrowRight, CalendarDays } from "lucide-react";
 
 type Studio = {
   _id: string;
   title: string;
   category: string;
   location: string;
+  availableDate: string;
   hourlyRate: number;
   securityDeposit: number;
   maxCapacity: number;
@@ -96,11 +96,38 @@ const ExploreStudioPage = async () => {
                     {studio.title}
                   </h3>
 
-                  <div className="mb-4 flex items-center gap-2 text-sm text-gray-500">
+                  {/* Location */}
+                  <div className="mb-3 flex items-center gap-2 text-sm text-gray-500">
                     <MapPin size={16} className="shrink-0 text-[#8B5E3C]" />
                     <span className="line-clamp-1">{studio.location}</span>
                   </div>
 
+                  {/* Available Date */}
+                  
+                  
+                  <div className="mb-4 flex items-center gap-2 text-sm text-gray-500">
+                    <CalendarDays
+                      size={16}
+                      className="shrink-0 text-[#8B5E3C]"
+                    />
+
+                    <span>Available from:</span>
+
+                    <span className="font-semibold text-[#172B4D]">
+                      {studio.availableDate
+                        ? new Date(studio.availableDate).toLocaleDateString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )
+                        : "Not specified"}
+                    </span>
+                  </div>
+
+                  {/* Overview */}
                   <p className="mb-5 line-clamp-2 min-h-10 text-sm leading-6 text-gray-500">
                     {studio.overview}
                   </p>
@@ -164,6 +191,7 @@ const ExploreStudioPage = async () => {
             <h3 className="text-xl font-semibold text-[#172B4D]">
               No Studios Available
             </h3>
+
             <p className="mt-2 text-sm text-gray-500">
               There are currently no studios to explore. Please check back
               later.
@@ -176,3 +204,4 @@ const ExploreStudioPage = async () => {
 };
 
 export default ExploreStudioPage;
+
