@@ -28,7 +28,7 @@ const BookStudioButton = ({ studio }: BookStudioButtonProps) => {
     const user = session?.user;
 
     if (!user) {
-      alert("Please login first!");
+      toast.error("Please login first!");
       router.push("/login");
       return;
     }
@@ -66,11 +66,13 @@ const BookStudioButton = ({ studio }: BookStudioButtonProps) => {
       if (res.ok && result.insertedId) {
         toast.success("Booking Successful!");
         router.push("/my-bookings");
+      } else if (res.status === 409) {
+        toast.warning("Sorry! This studio is already booked.");
       } else {
-        toast.error("Booking Failed!");
+        toast.error(result.message || "Booking Failed!");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Booking Error:", error);
       toast.error("Something went wrong!");
     } finally {
       setLoading(false);
