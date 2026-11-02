@@ -1,7 +1,7 @@
 
 "use client";
 
-  // import {  toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import { useEffect, useState } from "react";
 
@@ -25,7 +25,6 @@ import {
   UserRound,
   CalendarDays,
 } from "lucide-react";
-import { toast } from "./ui/toast";
 
 const categories = [
   "Photo Studio",
@@ -93,7 +92,7 @@ const EditStudioPage = ({ data }: Props) => {
         setStudio(result);
       } catch (error) {
         console.error(error);
-        alert("Failed to load studio data!");
+        toast.error("Failed to load studio data!");
       } finally {
         setLoading(false);
       }
@@ -145,7 +144,7 @@ const EditStudioPage = ({ data }: Props) => {
         throw new Error(result.message || "Update failed");
       }
 
-   alert("Studio updated successfully!");
+      toast.success("Studio updated successfully!");
 
       setOpen(false);
 
@@ -154,7 +153,7 @@ const EditStudioPage = ({ data }: Props) => {
 
     } catch (error) {
       console.error("Update Error:", error);
-      alert("Failed to update studio!");
+        toast.error("Failed to update studio!");
     } finally {
       setUpdating(false);
     }
