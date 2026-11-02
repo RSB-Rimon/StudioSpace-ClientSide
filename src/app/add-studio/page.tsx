@@ -1,5 +1,4 @@
-
-
+"use client";
 
 import {
   PlusCircle,
@@ -32,14 +31,57 @@ const amenities = [
 ];
 
 const AddNewStudioPage = () => {
+ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
 
-    
+  const form = event.currentTarget;
 
+  const formData = new FormData(form);
+
+  const data = {
+    title: formData.get("title"),
+    category: formData.get("category"),
+    location: formData.get("location"),
+    hourlyRate: Number(formData.get("hourlyRate")),
+    securityDeposit: Number(formData.get("securityDeposit")),
+    maxCapacity: Number(formData.get("maxCapacity")),
+    image: formData.get("image"),
+    amenities: formData.getAll("amenities"),
+    overview: formData.get("overview"),
+    ownerName: formData.get("ownerName"),
+    ownerEmail: formData.get("ownerEmail"),
+  };
+
+  console.log("Form Data:", data);
+
+  try {
+    const res = await fetch("http://localhost:5000/add-studios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    console.log("Backend Response:", result);
+
+    if (!res.ok) {
+      throw new Error(result.message || "Failed to add studio");
+    }
+
+    alert("Studio added successfully!");
+    form.reset();
+
+  } catch (error) {
+    console.error("Error adding studio:", error);
+  }
+};
 
   return (
     <main className="min-h-screen bg-[#F8F9FB] px-4 py-12">
       <div className="mx-auto max-w-4xl">
-
         {/* Page Heading */}
         <div className="mb-8">
           <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-[#8B5E3C]">
@@ -51,14 +93,16 @@ const AddNewStudioPage = () => {
           </h1>
 
           <p className="mt-3 text-sm leading-6 text-slate-500 md:text-base">
-            List your workspace and connect with creative professionals
-            looking for the perfect space.
+            List your workspace and connect with creative professionals looking
+            for the perfect space.
           </p>
         </div>
 
         {/* Form Card */}
-        <form className="space-y-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-8">
-
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-8"
+        >
           {/* Basic Information */}
           <section>
             <div className="mb-6 flex items-center gap-3">
@@ -77,7 +121,6 @@ const AddNewStudioPage = () => {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-
               <div className="md:col-span-2">
                 <label className="mb-2 block text-sm font-semibold text-slate-700">
                   Studio Title *
@@ -127,7 +170,6 @@ const AddNewStudioPage = () => {
                   />
                 </div>
               </div>
-
             </div>
           </section>
 
@@ -145,7 +187,6 @@ const AddNewStudioPage = () => {
             </div>
 
             <div className="grid gap-5 md:grid-cols-3">
-
               <div>
                 <label className="mb-2 block text-sm font-semibold text-slate-700">
                   Hourly Rate ($) *
@@ -199,7 +240,6 @@ const AddNewStudioPage = () => {
                   />
                 </div>
               </div>
-
             </div>
           </section>
 
@@ -302,7 +342,6 @@ const AddNewStudioPage = () => {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-
               <div>
                 <label className="mb-2 block text-sm font-semibold text-slate-700">
                   Host Name
@@ -328,7 +367,6 @@ const AddNewStudioPage = () => {
                   className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500 outline-none"
                 />
               </div>
-
             </div>
           </section>
 
@@ -342,7 +380,6 @@ const AddNewStudioPage = () => {
               Add Studio
             </button>
           </div>
-
         </form>
       </div>
     </main>
