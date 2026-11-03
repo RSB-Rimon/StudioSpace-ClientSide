@@ -11,6 +11,7 @@ import "swiper/css/effect-fade";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import FeaturedStudios from "./FeaturedStudios";
+import BrowseCategories from "./BrowseCategories";
 
 const slides = [
   {
@@ -102,6 +103,7 @@ export default function HomePage() {
         ))}
       </Swiper>
       <FeaturedStudios />
+      <BrowseCategories />
     </section>
   );
 }
