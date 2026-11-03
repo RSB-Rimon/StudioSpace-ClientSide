@@ -13,6 +13,7 @@ import { ArrowRight } from "lucide-react";
 import FeaturedStudios from "./FeaturedStudios";
 import BrowseCategories from "./BrowseCategories";
 import HowBookingWorks from "./HowBookingWorks";
+import HostGuarantee from "./HostGuarantee";
 
 const slides = [
   {
@@ -106,6 +107,7 @@ export default function HomePage() {
       <FeaturedStudios />
       <BrowseCategories />
       <HowBookingWorks />
+      <HostGuarantee />
     </section>
   );
 }
