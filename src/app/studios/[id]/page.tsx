@@ -86,7 +86,7 @@ const StudioDetailsPage = async ({ params }: StudioDetailsPageProps) => {
 
           {/* Edit & Delete Buttons */}
           <div className="flex items-center gap-3">
-            <EditStudioPage data={data} />
+            <EditStudioPage data={data}  />
             <DeleteStudioPage id={id} />
           </div>
         </div>
