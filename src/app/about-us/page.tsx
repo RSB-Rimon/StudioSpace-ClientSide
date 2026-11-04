@@ -5,7 +5,7 @@ import { Aperture, ArrowRight, Target, Eye } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <main className="bg-white">
+    <main id="about-us" className="bg-white about">
 
       {/* Section 1: About Hero */}
       <section className="overflow-hidden bg-[#172B4D]">
