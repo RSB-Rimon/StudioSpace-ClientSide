@@ -17,6 +17,7 @@ import DeleteStudioPage from "@/components/DeleteStudioPage";
 import BookStudioButton from "@/components/BookStudioButton";
 import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
+import { getTokenFromServer } from "@/app/lib/getTokenFormServer";
 
 interface Studio {
   _id: string;
@@ -42,14 +43,14 @@ const StudioDetailsPage = async ({ params }: StudioDetailsPageProps) => {
   const { id } = await params;
 
   let data: Studio | null = null;
- const jwtToken = await auth.api.getToken({
-  headers: await headers()
- })
- console.log(jwtToken?.token);
+
+const token = await getTokenFromServer();
+
+
   try {
     const res = await fetch(`http://localhost:5000/studios/${id}`, {
       headers:{
-         authorization : `Bearer ${jwtToken?.token}`
+         authorization : `Bearer ${token}`
       },
       cache: "no-store",
     });

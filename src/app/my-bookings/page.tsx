@@ -14,6 +14,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/app/lib/auth-client";
+import { getTokenFromClient } from "../lib/getTokenFromClient";
 
 interface Booking {
   _id: string;
@@ -29,7 +30,9 @@ interface Booking {
   createdAt: string;
 }
 
-const MyBookingPage = () => {
+const MyBookingPage =  () => {
+
+ 
   const { data: session } = authClient.useSession();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -41,13 +44,18 @@ const MyBookingPage = () => {
         setLoading(false);
         return;
       }
-
+ const token = await getTokenFromClient();
       try {
         const res = await fetch(
           `http://localhost:5000/my-bookings?email=${encodeURIComponent(
             session.user.email
           )}`,
-          { cache: "no-store" }
+          {
+            cache: "no-store",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (!res.ok) {

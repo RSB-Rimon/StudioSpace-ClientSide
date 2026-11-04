@@ -25,6 +25,7 @@ import {
   UserRound,
   CalendarDays,
 } from "lucide-react";
+import { getTokenFromClient } from "@/app/lib/getTokenFromClient";
 
 const categories = [
   "Photo Studio",
@@ -124,6 +125,11 @@ const EditStudioPage = ({ data }: Props) => {
       ownerEmail: formData.get("ownerEmail"),
     };
 
+
+    // jwtToken from client-side
+    const token  = await getTokenFromClient();
+
+     
     try {
       setUpdating(true);
 
@@ -133,6 +139,7 @@ const EditStudioPage = ({ data }: Props) => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(updatedData),
         }

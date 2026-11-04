@@ -15,16 +15,18 @@ import { Button } from "./ui/button";
 import { Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { redirect } from "next/navigation";
+import { getTokenFromClient } from "@/app/lib/getTokenFromClient";
 
 
 
 const DeleteStudioPage = ({id}: {id: string}) => {
     const handleDelete = async ()=>{
-
+       const token = await getTokenFromClient();
         const res = await fetch(`http://localhost:5000/studios/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
+                authorization: `Bearer ${token}`,
             },
         });
 

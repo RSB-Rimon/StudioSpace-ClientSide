@@ -7,6 +7,7 @@ import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/app/lib/auth-client";
 import { toast } from "react-toastify";
+import { getTokenFromClient } from "@/app/lib/getTokenFromClient";
 
 interface BookStudioButtonProps {
   studio: {
@@ -49,7 +50,7 @@ const BookStudioButton = ({ studio }: BookStudioButtonProps) => {
       status: "pending",
       createdAt: new Date(),
     };
-
+const token = await getTokenFromClient();
     try {
       setLoading(true);
 
@@ -57,6 +58,7 @@ const BookStudioButton = ({ studio }: BookStudioButtonProps) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(bookingData),
       });

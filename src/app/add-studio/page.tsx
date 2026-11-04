@@ -11,8 +11,10 @@ import {
   UserRound,
   CalendarDays,
 } from "lucide-react";
-import { authClient } from "../lib/auth-client";
+// import { authClient } from "../lib/auth-client";
 import { toast } from "react-toastify";
+import { getTokenFromClient } from "../lib/getTokenFromClient";
+
 
 const categories = [
   "Photo Studio",
@@ -40,7 +42,6 @@ const handleSubmit = async (
 ) => {
   event.preventDefault();
 
-  // Get form reference before await
   const form = event.currentTarget;
   const formData = new FormData(form);
 
@@ -61,17 +62,17 @@ const handleSubmit = async (
 
   try {
     // Get JWT token
-    const { data, error } = await authClient.token();
+    const token = await getTokenFromClient();
 
-    if (error || !data?.token) {
-      throw new Error("JWT token not found");
+    if (!token) {
+      throw new Error("JWT token not found. Please login first.");
     }
 
     const res = await fetch("http://localhost:5000/add-studios", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(dataForm),
     });
@@ -89,9 +90,11 @@ const handleSubmit = async (
 
   } catch (error) {
     console.error("Error adding studio:", error);
+    toast.error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
   }
 };
-
   return (
     <main className="min-h-screen bg-[#F8F9FB] px-4 py-12">
       <div className="mx-auto max-w-4xl">
