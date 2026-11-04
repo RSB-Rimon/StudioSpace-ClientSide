@@ -1,8 +1,19 @@
-import { betterAuth } from "better-auth";
+
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
+import { jwt } from "better-auth/plugins"
+import { betterAuth } from "better-auth";
 
-const client = new MongoClient(process.env.MONGODB_URI as string);
+// Prevent multiple MongoDB clients during hot reload
+const globalMongo = globalThis as unknown as { mongoClient?: MongoClient };
+
+let client: MongoClient;
+if (globalMongo.mongoClient) {
+  client = globalMongo.mongoClient;
+} else {
+  client = new MongoClient(process.env.MONGODB_URI as string);
+  globalMongo.mongoClient = client;
+}
 const db = client.db('studiospase');
 
 export const auth = betterAuth({
@@ -15,7 +26,17 @@ export const auth = betterAuth({
  socialProviders:{
   github:{
     clientId :process.env.GITHUB_CLIENT_ID as string,
-    clientSecret:process.env.GITHUB_SECRETS_ID as string
+    clientSecret: process.env.GITHUB_CLIENT_SECRET as string
   }
- }
+ },
+ plugins: [
+        jwt(), 
+    ],
+    session:{
+      cookieCache:{
+        enabled : true,
+        strategy :'jwt',
+        maxAge : 7 * 24 * 60 * 60, // 7 days in seconds
+      }
+    }
 });

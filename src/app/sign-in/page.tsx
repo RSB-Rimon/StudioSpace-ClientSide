@@ -18,11 +18,13 @@ import {
 import { Input } from "@/components/ui/input";
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { authClient } from "../lib/auth-client";
 import { Aperture, ArrowRight, LockKeyhole } from "lucide-react";
 
 export default function SignInPage() {
+  const router = useRouter();
+
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -38,19 +40,25 @@ export default function SignInPage() {
     });
 
     if (data) {
-      redirect("/");
+      router.push("/");
     }
 
     if (error) {
       console.log(error);
     }
   };
-  const handleGitHubSignIn = async ()=>{
-    const data = await authClient.signIn.social({
-      provider:"github"
+  const handleGitHubSignIn = async () => {
+    const { data, error } = await authClient.signIn.social({
+      provider: "github",
+      callbackURL: "/",
     });
-    console.log(data)
-  }
+    if (data?.redirect && data?.url) {
+      window.location.href = data.url;
+    }
+    if (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-[#F8F9FB] px-4 py-12 md:py-16">

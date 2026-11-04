@@ -1,4 +1,11 @@
+
 "use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+import { authClient } from "../lib/auth-client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -8,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import {
   Field,
   FieldDescription,
@@ -15,41 +23,68 @@ import {
   FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field";
+
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { authClient } from "../lib/auth-client";
-import { redirect } from "next/navigation";
+
 import { Aperture, ArrowRight, Camera } from "lucide-react";
 
 export default function SignInFrom() {
-  const handleEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // GitHub Sign Up
+  const handleGitHubSignUp = async () => {
+    setErrorMessage("");
+    setLoading(true);
+
+    const { error } = await authClient.signIn.social({
+      provider: "github",
+      callbackURL: "/",
+    });
+
+    if (error) {
+      console.log(error);
+      setErrorMessage(error.message || "GitHub login failed!");
+      setLoading(false);
+    }
+  };
+
+  // Email Sign Up
+  const handleEmailSignUp = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
-    const fromData = new FormData(e.currentTarget);
+    setErrorMessage("");
+    setLoading(true);
 
-    const user = Object.fromEntries(fromData.entries()) as {
+    const formData = new FormData(e.currentTarget);
+
+    const user = Object.fromEntries(formData.entries()) as {
       name: string;
       email: string;
       password: string;
       image: string;
     };
 
-    const { data, error } = await authClient.signUp.email({
-      ...user,
-    });
-
-    if (data) {
-      redirect("/");
-    }
+    const { error } = await authClient.signUp.email(user);
 
     if (error) {
       console.log(error);
+      setErrorMessage(error.message || "Registration failed!");
+      setLoading(false);
+    } else {
+      router.push("/");
+      router.refresh();
     }
   };
 
   return (
     <main className="min-h-screen bg-[#F8F9FB] px-4 py-12 md:py-16">
       <div className="mx-auto max-w-md">
+
         {/* Brand */}
         <Link href="/" className="mb-8 flex items-center justify-center gap-2">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#172B4D] text-white">
@@ -62,6 +97,7 @@ export default function SignInFrom() {
         </Link>
 
         <Card className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
+
           {/* Top Accent */}
           <div className="h-1.5 bg-[#8B5E3C]" />
 
@@ -80,13 +116,24 @@ export default function SignInFrom() {
           </CardHeader>
 
           <CardContent className="px-6 pb-8 sm:px-8">
+
+            {/* Error Message */}
+            {errorMessage && (
+              <p className="mb-4 rounded-md bg-red-50 p-3 text-center text-sm text-red-600">
+                {errorMessage}
+              </p>
+            )}
+
             <form onSubmit={handleEmailSignUp}>
               <FieldGroup className="gap-5">
-                {/* Google Button */}
+
+                {/* GitHub Button */}
                 <Field>
                   <Button
+                    onClick={handleGitHubSignUp}
                     variant="outline"
                     type="button"
+                    disabled={loading}
                     className="h-11 w-full border-slate-300 text-[#172B4D] hover:bg-slate-50"
                   >
                     <svg
@@ -97,6 +144,7 @@ export default function SignInFrom() {
                     >
                       <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.4 7.9 10.95.6.1.8-.25.8-.55v-2.1c-3.2.7-3.9-1.35-3.9-1.35-.5-1.3-1.3-1.65-1.3-1.65-1.05-.7.1-.7.1-.7 1.15.1 1.75 1.2 1.75 1.2 1 1.7 2.55 1.2 3.2.9.1-.7.4-1.2.7-1.45-2.55-.3-5.2-1.3-5.2-5.7 0-1.25.45-2.3 1.2-3.1-.1-.3-.55-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.65 1.6.2 2.8.1 3.1.75.8 1.2 1.85 1.2 3.1 0 4.4-2.65 5.4-5.2 5.7.4.35.75 1.05.75 2.15v3.2c0 .3.2.65.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
                     </svg>
+
                     Continue with GitHub
                   </Button>
                 </Field>
@@ -110,6 +158,7 @@ export default function SignInFrom() {
                   <FieldLabel htmlFor="name" className="text-[#172B4D]">
                     Full Name
                   </FieldLabel>
+
                   <Input
                     id="name"
                     name="name"
@@ -125,6 +174,7 @@ export default function SignInFrom() {
                   <FieldLabel htmlFor="image" className="text-[#172B4D]">
                     Profile Image URL
                   </FieldLabel>
+
                   <Input
                     id="image"
                     name="image"
@@ -140,6 +190,7 @@ export default function SignInFrom() {
                   <FieldLabel htmlFor="email" className="text-[#172B4D]">
                     Email Address
                   </FieldLabel>
+
                   <Input
                     id="email"
                     name="email"
@@ -155,6 +206,7 @@ export default function SignInFrom() {
                   <FieldLabel htmlFor="password" className="text-[#172B4D]">
                     Password
                   </FieldLabel>
+
                   <Input
                     id="password"
                     name="password"
@@ -163,19 +215,22 @@ export default function SignInFrom() {
                     required
                     className="h-11 focus-visible:ring-[#8B5E3C]"
                   />
+
                   <FieldDescription>
                     Use at least 6 characters with uppercase and lowercase
                     letters.
                   </FieldDescription>
                 </Field>
 
-                {/* Submit */}
+                {/* Submit Button */}
                 <Field className="gap-4">
                   <Button
                     type="submit"
+                    disabled={loading}
                     className="h-12 w-full bg-[#172B4D] font-semibold text-white transition hover:bg-[#8B5E3C]"
                   >
-                    Create Account
+                    {loading ? "Creating Account..." : "Create Account"}
+
                     <ArrowRight size={18} className="ml-2" />
                   </Button>
 
@@ -189,11 +244,13 @@ export default function SignInFrom() {
                     </Link>
                   </FieldDescription>
                 </Field>
+
               </FieldGroup>
             </form>
           </CardContent>
         </Card>
 
+        {/* Terms */}
         <p className="mt-6 text-center text-xs leading-6 text-slate-500">
           By creating an account, you agree to our{" "}
           <Link href="/terms" className="text-[#8B5E3C] hover:underline">
@@ -202,13 +259,13 @@ export default function SignInFrom() {
           and{" "}
           <Link href="/privacy" className="text-[#8B5E3C] hover:underline">
             Privacy Policy
-          </Link>
-          .
+          </Link>.
         </p>
 
         <p className="mt-4 text-center text-xs text-slate-400">
           © 2026 StudioSpace. All rights reserved.
         </p>
+
       </div>
     </main>
   );
