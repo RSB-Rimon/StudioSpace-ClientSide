@@ -11,6 +11,8 @@ import {
   UserRound,
   CalendarDays,
 } from "lucide-react";
+import { authClient } from "../lib/auth-client";
+import { toast } from "react-toastify";
 
 const categories = [
   "Photo Studio",
@@ -33,54 +35,62 @@ const amenities = [
 ];
 
 const AddNewStudioPage = () => {
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
+const handleSubmit = async (
+  event: React.FormEvent<HTMLFormElement>
+) => {
+  event.preventDefault();
 
-    const form = event.currentTarget;
-    const formData = new FormData(form);
+  // Get form reference before await
+  const form = event.currentTarget;
+  const formData = new FormData(form);
 
-    const data = {
-      title: formData.get("title"),
-      category: formData.get("category"),
-      location: formData.get("location"),
-      availableDate: formData.get("availableDate"),
-      hourlyRate: Number(formData.get("hourlyRate")),
-      securityDeposit: Number(formData.get("securityDeposit")),
-      maxCapacity: Number(formData.get("maxCapacity")),
-      image: formData.get("image"),
-      amenities: formData.getAll("amenities"),
-      overview: formData.get("overview"),
-      ownerName: formData.get("ownerName"),
-      ownerEmail: formData.get("ownerEmail"),
-    };
-
-    console.log("Form Data:", data);
-
-    try {
-      const res = await fetch("http://localhost:5000/add-studios", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      console.log("Backend Response:", result);
-
-      if (!res.ok) {
-        throw new Error(result.message || "Failed to add studio");
-      }
-
-      alert("Studio added successfully!");
-      form.reset();
-    } catch (error) {
-      console.error("Error adding studio:", error);
-    }
+  const dataForm = {
+    title: formData.get("title"),
+    category: formData.get("category"),
+    location: formData.get("location"),
+    availableDate: formData.get("availableDate"),
+    hourlyRate: Number(formData.get("hourlyRate")),
+    securityDeposit: Number(formData.get("securityDeposit")),
+    maxCapacity: Number(formData.get("maxCapacity")),
+    image: formData.get("image"),
+    amenities: formData.getAll("amenities"),
+    overview: formData.get("overview"),
+    ownerName: formData.get("ownerName"),
+    ownerEmail: formData.get("ownerEmail"),
   };
+
+  try {
+    // Get JWT token
+    const { data, error } = await authClient.token();
+
+    if (error || !data?.token) {
+      throw new Error("JWT token not found");
+    }
+
+    const res = await fetch("http://localhost:5000/add-studios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      },
+      body: JSON.stringify(dataForm),
+    });
+
+    const result = await res.json();
+
+    console.log("Backend Response:", result);
+
+    if (!res.ok) {
+      throw new Error(result.message || "Failed to add studio");
+    }
+
+    toast.success("Studio added successfully!");
+    form.reset();
+
+  } catch (error) {
+    console.error("Error adding studio:", error);
+  }
+};
 
   return (
     <main className="min-h-screen bg-[#F8F9FB] px-4 py-12">
