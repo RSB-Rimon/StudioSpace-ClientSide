@@ -57,7 +57,7 @@ const handleSubmit = async (
     amenities: formData.getAll("amenities"),
     overview: formData.get("overview"),
     ownerName: formData.get("ownerName"),
-    ownerEmail: formData.get("ownerEmail"),
+    // ownerEmail: formData.get("ownerEmail"),
   };
 
   try {

@@ -133,7 +133,7 @@ const Navbar = () => {
                   </Link>
 
                   <Link
-                    href="/my-listings"
+                    href="/my-studios"
                     className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-slate-50 hover:text-[#8B5E3C]"
                   >
                     <Building2 size={17} />
