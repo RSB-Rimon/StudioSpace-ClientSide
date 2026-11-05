@@ -17,12 +17,12 @@ interface Studio {
   securityDeposit: number;
   maxCapacity: number;
   image: string;
+  availableDate: string; // Added
   amenities: string[];
   overview: string;
-  ownerName: string;
-  ownerEmail: string;
+  ownerName?: string;
+  ownerEmail?: string;
 }
-
 
 export default function MyStudiosPage() {
   const [studios, setStudios] = useState<Studio[]>([]);
@@ -39,7 +39,7 @@ export default function MyStudiosPage() {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/my-studios", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-studios`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -61,7 +61,7 @@ export default function MyStudiosPage() {
 
   // NEW: Page load হলে studios fetch হবে
   useEffect(() => {
-    fetchMyStudios();
+    void Promise.resolve().then(fetchMyStudios);
   }, []);
 
   // NEW: Studio delete function
@@ -77,7 +77,7 @@ export default function MyStudiosPage() {
 
       const token = await getTokenFromClient();
 
-      const res = await fetch(`http://localhost:5000/studios/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/studios/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

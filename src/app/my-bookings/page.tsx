@@ -47,7 +47,7 @@ const MyBookingPage =  () => {
  const token = await getTokenFromClient();
       try {
         const res = await fetch(
-          `http://localhost:5000/my-bookings?email=${encodeURIComponent(
+          `${process.env.NEXT_PUBLIC_API_URL}/my-bookings?email=${encodeURIComponent(
             session.user.email
           )}`,
           {

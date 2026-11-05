@@ -48,7 +48,7 @@ const token = await getTokenFromServer();
 
 
   try {
-    const res = await fetch(`http://localhost:5000/studios/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/studios/${id}`, {
       headers:{
          authorization : `Bearer ${token}`
       },

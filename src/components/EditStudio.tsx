@@ -56,12 +56,12 @@ interface Studio {
   securityDeposit: number;
   maxCapacity: number;
   image: string;
+  availableDate: string; // Added
   amenities: string[];
   overview: string;
-  ownerName: string;
-  ownerEmail: string;
+  ownerName?: string;
+  ownerEmail?: string;
 }
-
 interface Props {
   data: Studio;
 }
@@ -81,7 +81,7 @@ const EditStudioPage = ({ data }: Props) => {
         setLoading(true);
 
         const res = await fetch(
-          `http://localhost:5000/studios/${data._id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/studios/${data._id}`
         );
 
         if (!res.ok) {
@@ -134,7 +134,7 @@ const EditStudioPage = ({ data }: Props) => {
       setUpdating(true);
 
       const res = await fetch(
-        `http://localhost:5000/studios/${data._id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/studios/${data._id}`,
         {
           method: "PATCH",
           headers: {

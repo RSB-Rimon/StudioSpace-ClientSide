@@ -25,7 +25,7 @@ export default function FeaturedStudios() {
 
  useEffect(() => {
   const loadStudios = async () => {
-    const res = await fetch("http://localhost:5000/exploreStudios");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exploreStudios`);
     const data = await res.json();
 
     setStudios(data.slice(0, 6));

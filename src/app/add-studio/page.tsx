@@ -68,7 +68,7 @@ const handleSubmit = async (
       throw new Error("JWT token not found. Please login first.");
     }
 
-    const res = await fetch("http://localhost:5000/add-studios", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-studios`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

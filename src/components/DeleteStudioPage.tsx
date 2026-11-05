@@ -22,7 +22,7 @@ import { getTokenFromClient } from "@/app/lib/getTokenFromClient";
 const DeleteStudioPage = ({id}: {id: string}) => {
     const handleDelete = async ()=>{
        const token = await getTokenFromClient();
-        const res = await fetch(`http://localhost:5000/studios/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/studios/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

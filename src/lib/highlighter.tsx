@@ -80,8 +80,7 @@ export async function loadHighlighter(language: string) {
   }
 
   return {
-    // Returns one React node per line, and the grammar state after the last
-    // line. Pass that state back to continue where the code left off.
+    
     highlight(code: string, state?: GrammarState) {
       const tokenize = (text: string) =>
         shiki.codeToTokens(text, {
@@ -91,8 +90,7 @@ export async function loadHighlighter(language: string) {
           grammarState: state,
         }).tokens
 
-      // ANSI has no grammar state, so each line is tokenized on its own and
-      // gets the same colors whether it arrives in one piece or streams.
+      
       const tokens =
         lang === "ansi"
           ? code.split("\n").flatMap((line) => tokenize(line))
